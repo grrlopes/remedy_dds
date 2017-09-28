@@ -1,1 +1,4 @@
 .vscode
+*.retry
+*.pyc
+.config.yaml
