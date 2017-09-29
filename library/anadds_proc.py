@@ -52,10 +52,6 @@ class Anadds_proc:
                         self.rede = self.cred[nivel][valor]
                     elif valor == 'porta':
                         self.porta = self.cred[nivel][valor]
-                    '''
-                    elif valor == 'query':
-                        self.query = self.cred[nivel][valor]
-                    '''
         else:
             return "Config.yaml não encontrado ou erro de syntax"
 
@@ -72,11 +68,6 @@ class Anadds_proc:
             offset=0,
             limit=1
         )
-        '''
-        for base_chave, base_valor in self.resultado:
-            for chave, valor in base_valor.items():
-                print '{}:{}'.format(chave, valor)
-        '''
 
     def cnxbmc(self):
         '''

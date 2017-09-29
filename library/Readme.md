@@ -58,3 +58,17 @@ Efetuar o download dentro da pasta **/tmp**.
       register: result
     - debug: var=result
 ```
+
+5. Arquivo de configuração config.yaml
+- OBS: **Esse arquivo é simplesmente temporário, a nível de desenvolvimento.**
+- Arquivo devera fica no mesmo nível do modulo
+- Arquivo **temp** contendo as credencias e endereço do servidor.
+```
+--- 
+credencial:
+  login: ""
+  senha: ""
+servidor:
+  rede: ""
+  porta: 2020
+```
