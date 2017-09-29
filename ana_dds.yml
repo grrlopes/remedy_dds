@@ -1,8 +1,8 @@
 - hosts: localhost
   tasks:
-    - name: Poc DDS BMC Remedy
+    - name: POC DDS BMC Remedy - Descoberta de servico
       anadds_proc:
         ChangeID: CHG000006792500
         Status: WorkInProgress
-      register: resultt
-    - debug: var=resultt
+      register: result
+    - debug: var=result

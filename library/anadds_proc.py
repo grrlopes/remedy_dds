@@ -1,5 +1,22 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
+
+DOCUMENTATION = '''
+---
+module: anadds_proc
+short_description: Descoberta de serviço na base BMC Remedy
+'''
+
+EXAMPLES = '''
+- hosts: localhost
+  tasks:
+    - name: POC DDS BMC Remedy - Descoberta de servico
+      anadds_proc:
+        ChangeID: CHG00*****
+        Status: WorkInProgress
+      register: result
+    - debug: var=result
+'''
 import os
 import base64
 import yaml
@@ -21,11 +38,10 @@ class Anadds_proc:
         self.conexao = None
         self.resultado = None
         self.query = None
-        self.tabelas = []
 
     def _conf(self):
-        if os.path.isfile('/home/gabriel/workspace_produban/pyremedy_modulo/library/config.yaml'):
-            self.cred = yaml.load(open('/home/gabriel/workspace_produban/pyremedy_modulo/library/config.yaml', 'r'))
+        if os.path.isfile(os.getcwd()+'/workspace_produban/pyremedy_modulo/library/config.yaml'):
+            self.cred = yaml.load(open(os.getcwd()+'/workspace_produban/pyremedy_modulo/library/config.yaml', 'r'))
             for nivel in self.cred:
                 for valor in self.cred[nivel]:
                     if valor == 'login':
@@ -62,7 +78,11 @@ class Anadds_proc:
                 print '{}:{}'.format(chave, valor)
         '''
 
-    def chamador(self):
+    def cnxbmc(self):
+        '''
+        Methodo que encapsula a conexão com a base remedy, efetuado autenticação
+        em caso de sucesso ou não.
+        '''
         try:
             self.conexao = ARS(server=base64.b64decode(self.rede), port=self.porta, \
              user=base64.b64decode(self.login), password=base64.b64decode(self.senha))
@@ -84,7 +104,11 @@ class Anadds_proc:
                 self.conexao.terminate()
             print "\nExecução finalizada\n"
 
-    def teste(self):
+    def playana(self):
+        """
+        Frame AnsibleModule que manipula o status, filtros e
+        valores com base nos parametros do playbook.
+        """
         self._conf()
         fields = {
             "ChangeID": {"required": True, "type": "str"},
@@ -98,17 +122,22 @@ class Anadds_proc:
             module.exit_json(changed=False)
         if module.params['Status'] == 'WorkInProgress' and module.params['ChangeID'] is not None:
             self._conf()
-            self.query = """ 'Status*' != "Scheduled" AND 'Change ID+' = \""""+module.params['ChangeID']+"""\" """
-            self.chamador()
+            self.query = """ 'Status*' != "Scheduled" AND
+            'Change ID+' = \""""+module.params['ChangeID']+"""\" """
+            self.cnxbmc()
             module.exit_json(changed=False, msg=self.resultado)
         else:
             msg = "Não encontrado"
             module.fail_json(msg=msg)
 
 class Executa(Anadds_proc):
+    '''
+    Inicialiaza o projeto: Chama a methodo playana
+    contento o manipulador do AnsibleModule
+    '''
     def __init__(self):
         Anadds_proc.__init__(self)
-        self.teste()
+        self.playana()
 
 class Principal:
     if __name__ == "__main__":
