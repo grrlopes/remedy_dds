@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
+import os
+import base64
+import yaml
+from pyremedy import ARS, ARSError
+from ansible.module_utils.basic import AnsibleModule
+__author__ = 'Equipe Automação Indracompany'
 
 DOCUMENTATION = '''
 ---
@@ -17,12 +23,6 @@ EXAMPLES = '''
       register: result
     - debug: var=result
 '''
-import os
-import base64
-import yaml
-from pyremedy import ARS, ARSError
-from ansible.module_utils.basic import AnsibleModule
-__author__ = 'Equipe Automação Indracompany'
 
 class Anadds_proc:
     '''
